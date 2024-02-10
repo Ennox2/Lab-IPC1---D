@@ -77,28 +77,38 @@ public class JavaApplication5 {
     }
 
     public static void llenrPenalizaciones() {
-        //Instancia de la librería random
+        // Se crea una instancia de la clase Random para generar números aleatorios.
         Random random = new Random();
 
+        // Variables para almacenar la cantidad de penalizaciones y la posición aleatoria.
         int cantidadPenalizaciones;
         int posicionAleatoria;
+
+        // Recorre las filas de la matriz penalizaciones.
         for (int i = 0; i < penalizaciones.length; i++) {
 
-            //0, 1, 2
-            //+2
+            // Se elige aleatoriamente la cantidad de penalizaciones para la fila actual (entre 2 y 4).
+            // random.nextInt(3) genera un número random (aleatorio) entre 0 (incluido) y 3 (excluido) osea da los resultados 0, 1 o 2.
+            // al numero random obtenido se le suma 2 lo que da un número de 2 a 4
             cantidadPenalizaciones = random.nextInt(3) + 2;
 
+            // Se realiza un bucle mientras aún haya penalizaciones por agregar.
             while (cantidadPenalizaciones != 0) {
-                //0-7
 
+                // Se elige aleatoriamente una posición en la fila actual.
                 while (true) {
                     posicionAleatoria = random.nextInt(penalizaciones[i].length);
-                    //hola#
+
+                    // Si la posición no contiene ya una penalización (#), se rompe el bucle.
                     if (!penalizaciones[i][posicionAleatoria].contains("#")) {
                         break;
                     }
                 }
+
+                // Se agrega la penalización (precedida por #) en la posición aleatoria.
                 penalizaciones[i][posicionAleatoria] = "#" + penalizaciones[i][posicionAleatoria];
+
+                // Se reduce la cantidad de penalizaciones restantes.
                 cantidadPenalizaciones--;
             }
         }
