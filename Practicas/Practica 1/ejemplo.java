@@ -42,7 +42,7 @@ public class JavaApplication5 {
             case 1:
                 System.out.println(" Partida Iniciada");
                 llenarMatriz();
-                llenrPenalizaciones();
+                llenarPenalizaciones();
 
                 elegirOpcion();
 
@@ -76,7 +76,7 @@ public class JavaApplication5 {
 
     }
 
-    public static void llenrPenalizaciones() {
+    public static void llenarPenalizaciones() {
         // Se crea una instancia de la clase Random para generar números aleatorios.
         Random random = new Random();
 
@@ -221,7 +221,8 @@ public class JavaApplication5 {
 
         if (nivelPenalizacion == 1 || nivelPenalizacion == 2) {
 
-            //Logia de penalizaciones
+            //Imlementar logica de penalizaciones
+            
             System.out.println("Estoy en nivel facil de penalizacion");
         } else if (nivelPenalizacion == 3 || nivelPenalizacion == 4 || nivelPenalizacion == 5) {
             System.out.println("Estoy en nivel intermedio de penalizacion");
