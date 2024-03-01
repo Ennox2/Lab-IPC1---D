@@ -4,10 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.util.Rotation;
 
 public class Administrador extends JFrame implements ActionListener {
 
-    JButton btnRegistro, btn_salir;
+    JButton btnRegistro, btn_salir, btn_eliminar;
     JTable table_estudiante;
 
     public Administrador() {
@@ -41,6 +50,13 @@ public class Administrador extends JFrame implements ActionListener {
         btn_salir.addActionListener(this);
         pest1.add(btn_salir);
         
+        btn_eliminar = new JButton("Eliminar");
+        btn_eliminar.setBounds(1200, 25, 180, 50);
+        btn_eliminar.setVisible(true);
+        btn_eliminar.setEnabled(true);
+        btn_eliminar.addActionListener(this);
+        pest1.add(btn_eliminar);
+        
         // Titulo
         // Crear un nuevo JLabel con el texto "Listado Oficial"
         JLabel lbl4 = new JLabel("Listado Oficial");
@@ -49,7 +65,7 @@ public class Administrador extends JFrame implements ActionListener {
         // Estable_estudiantecer un borde alrededor del JLabel con un grosor de 2 píxeles y color negro
         lbl4.setBorder(BorderFactory.createLineBorder(Color.black, 2));
         // Estable_estudiantecer el color de fondo del JLabel como GRIS CLARO
-       lbl4.setBackground(Color.LIGHT_GRAY);
+        lbl4.setBackground(Color.LIGHT_GRAY);
         // Hacer que el JLabel sea opaco para que se pueda ver el color de fondo
         lbl4.setOpaque(true);
         // Alinear vertical y horizontalmente el texto del JLabel al centro
@@ -65,7 +81,7 @@ public class Administrador extends JFrame implements ActionListener {
 
         //Tabla
         // Crear un modelo de tabla y agregar datos de ejemplo
-        String[] columnNames = {"Codigo", "Nombre", "Apellido", "Correo", "Genero"};
+        String[] columnNames = {"Codigo", "Nombre", "Apellido", "Correo", "Genero", "Nota"};
 
         // Crear una instancia de JTable con los datos y nombres de columna
         table_estudiante = new JTable(Clase5.convertirDatosEstudiantes_tabla(), columnNames);
@@ -88,6 +104,73 @@ public class Administrador extends JFrame implements ActionListener {
         // Agregar el JScrollPane (que contiene la tabla) al panel pest1
         pest1.add(scrollPane);
         
+        
+        
+        // Gráficas
+        // Estilos de graficas: http://www.java2s.com/Code/Java/Chart/CatalogChart.htm
+        // Insertar nuestra data (valor, "categoria", "Leyenda de la columna")
+        DefaultCategoryDataset datos = new DefaultCategoryDataset(); 
+        ArrayList<Estudiante> lista_ordenada = Clase5.bubblesortNotaEstudiante(); 
+        
+        for(int i = 0; i < Math.min(3,lista_ordenada.size()) ; i++){
+            datos.setValue(lista_ordenada.get(i).getNota(), "IPC 1", lista_ordenada.get(i).getNombre());
+        }
+        
+        
+        // Instancear gráfica de barras 3D
+        JFreeChart grafico_barras = ChartFactory.createBarChart3D(
+                "Top 3 mejores notas",
+                "Estudiantes de IPC1",
+                "Calificacion",
+                datos,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false        
+        );
+        
+        // Creación de un ChartPanel el cual almacenará nuestro gráfico
+        ChartPanel cPanel = new ChartPanel(grafico_barras); 
+        // Habilitamos es scroll
+        cPanel.setMouseWheelEnabled(true);
+        // Asignamos la posición y las dimensiones de nuestro ChartPanel
+        cPanel.setBounds(800, 100, 450, 300);
+        // Agregamos a nuestra pestaña el ChartPanel con nuestro gráfico
+        pest1.add(cPanel);
+        
+        
+         // Ejemplo 2 (Gráfica de pie)
+        DefaultPieDataset datos2 = new DefaultPieDataset(); 
+        datos2.setValue("Java", 43.2);
+        datos2.setValue("Visual Basic", 10.0);
+        datos2.setValue("C++", 17.5);
+        datos2.setValue("PHP", 32.5);
+        datos2.setValue("Perl", 1.5);
+        
+         // Instancear gráfica de pie 3D
+        JFreeChart grafico_pie = ChartFactory.createPieChart3D(
+                "Lenguajes de programacion mas usados",
+                datos2,
+                true,
+                true,
+                false        
+        );
+        
+        // Configuraciones adicionales a nuestro gráfico de pie
+        PiePlot3D plot = (PiePlot3D) grafico_pie.getPlot(); 
+        plot.setStartAngle(290);
+        plot.setDirection(Rotation.CLOCKWISE);
+        plot.setForegroundAlpha(0.5f);
+        plot.setNoDataMessage("No data to display");
+        
+        // Creación de un ChartPanel el cual almacenará nuestro gráfico
+        ChartPanel cPanel2 = new ChartPanel(grafico_pie); 
+        // Habilitamos es scroll
+        cPanel2.setMouseWheelEnabled(true);
+         // Asignamos la posición y las dimensiones de nuestro ChartPanel
+        cPanel2.setBounds(800, 100, 450, 300);
+        // Agregamos a nuestra pestaña 2 el ChartPanel con nuestro gráfic
+        pest2.add(cPanel2);
         
         //============================Vista ==================================
          JLabel titleLabel = new JLabel("Welcome");
@@ -117,6 +200,32 @@ public class Administrador extends JFrame implements ActionListener {
         if (e.getSource() == btn_salir) {
             Login vtn_login = new Login();
             this.dispose();
+        }
+        
+        if (e.getSource() == btn_eliminar) {
+            
+            //Metodo para eliminar un estudiante segun su codigo
+            //Pedirle al usuario un codigo y parsearlo a int 
+            //showInputDialog es el cuadro de texto
+            int idInput = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del usuario: ")); 
+            
+            //Recorrer todo el arraylist de los estudiantes 
+            for(int i = 0; i < Clase5.listaEstudiantes.size() ; i++){
+                
+                //comparar si el elemento de la posicion actual es igual al que el usuario ingreso
+                if (Clase5.listaEstudiantes.get(i).getCodigo()  == idInput){
+                    //Eliminar de la lista (se le envia el indice del elemento que se quiere eliminar)
+                    Clase5.listaEstudiantes.remove(i);
+                }
+            }
+            // Cierra la ventana actual
+            this.dispose();
+
+            // Crea y muestra una nueva instancia de la ventana Administrador
+            Administrador nuevaVentana = new Administrador();
+            nuevaVentana.setVisible(true);
+            
+            
         }
     }
 

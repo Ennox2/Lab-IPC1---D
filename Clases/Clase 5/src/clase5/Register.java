@@ -11,6 +11,7 @@ public class Register extends JFrame implements ActionListener {
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JTextField emailField;
+    private JTextField notaField;
     private JComboBox<String> genderComboBox;
 
     private JButton registerButton;
@@ -57,16 +58,25 @@ public class Register extends JFrame implements ActionListener {
         genderComboBox = new JComboBox<>(genders);
         genderComboBox.setBounds(130, 170, 150, 25);
         this.add(genderComboBox);
+        
+        
+        JLabel notaLabel = new JLabel("Nota:");
+        notaLabel.setBounds(80, 200, 80, 25);
+        this.add(notaLabel);
+
+        notaField = new JTextField();
+        notaField.setBounds(130, 200, 260, 25);
+        this.add(notaField);
 
         registerButton = new JButton("Registrarse");
-        registerButton.setBounds(180, 220, 150, 25);
+        registerButton.setBounds(180, 240, 150, 25);
         registerButton.setForeground(Color.WHITE);
         registerButton.setBackground(new Color(214, 225, 50));
         registerButton.addActionListener(this);
         this.add(registerButton);
 
         this.setTitle("Registro");
-        this.setBounds(650, 400, 500, 300);
+        this.setBounds(650, 400, 500, 350);
         this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -80,14 +90,16 @@ public class Register extends JFrame implements ActionListener {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();
+            int nota = Integer.parseInt(notaField.getText());
             String selectedGender = (String) genderComboBox.getSelectedItem();
 
             System.out.println("Nombre: " + firstName);
             System.out.println("Apellido: " + lastName);
             System.out.println("Correo: " + email);
             System.out.println("Género: " + selectedGender);
+            System.out.println("Nota: " + nota);
             
-            Clase5.Agegar_estudiante(Clase5.codigo, firstName, lastName, email, selectedGender);
+            Clase5.Agegar_estudiante(Clase5.codigo, firstName, lastName, email, selectedGender, nota);
             Clase5.codigo++;
             this.dispose();
             
