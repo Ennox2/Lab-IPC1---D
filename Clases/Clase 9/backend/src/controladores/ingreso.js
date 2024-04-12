@@ -37,7 +37,14 @@ function Login(req, res){
         
         if (usuario){
             // Enviar una respuesta con los datos del usuario sin la contraseña
-            res.json({mensaje : "Usuario ha iniciado sesion", error: false})
+            res.json({mensaje : "Usuario ha iniciado sesion", 
+            user: {
+                carnet: usuario.carnet,
+                nombre: usuario.nombre,
+                edad: usuario.edad,
+                facultad: usuario.facultad
+            },           
+            error: false})
         }else {
             // Si el usuario no existe o la contraseña es incorrecta, devolver un mensaje de error
             res.json({mensaje : "Usuario no esta en el sistema", error: true})

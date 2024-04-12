@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'; // Importa React, el hook useState y el hook useEffect 
 import { Modal, Button } from 'react-bootstrap'; // Importa componentes de React Bootstrap
+import Sidebar from './navbar';
+import Cookies from 'js-cookie';
 
 const Administrador = () => {
     const [users, setUsers] = useState([]); // Declara el estado 'users' para almacenar la lista de usuarios
@@ -8,6 +10,7 @@ const Administrador = () => {
 
 
     useEffect(() => { // Utiliza el hook useEffect para cargar la lista de usuarios cuando se monta el componente o cuando 'validarEliminacion' cambia
+        console.log("Bienvenido " + Cookies.get('usuario'))
         const fetchData = async () => {
             try {
                 const response = await fetch('http://localhost:5000/users', {
@@ -62,6 +65,11 @@ const Administrador = () => {
 
 
     return ( // Devuelve el contenido JSX que representa el componente
+
+    <div className="App">
+        <Sidebar activeWindow="Home"></Sidebar>
+
+    <div className="content">
     <div className="table-container"> {/* Contenedor de la tabla */}
         <table className="table table-bordered text-center"> {/* Tabla con bordes y alineación centrada */}
             <thead className="table-dark"> {/* Cabecera de la tabla con fondo oscuro */}
@@ -107,6 +115,8 @@ const Administrador = () => {
                 </Modal.Footer>
             </Modal>
         )}
+    </div>
+    </div>
     </div>
 );
 

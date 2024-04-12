@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 
 
 const Login = () => {
@@ -27,6 +27,7 @@ const Login = () => {
             console.log(data)
             if( !data.error){
                 alert(data.mensaje)
+                Cookies.set('usuario', data.user.carnet)
                 navigate("/admin")
 
             }else{

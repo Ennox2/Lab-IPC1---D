@@ -5,6 +5,9 @@ const cors = require('cors'); // Importa el módulo CORS para habilitar el inter
 // Creación de la aplicación Express
 const app = express(); 
 
+const bodyParser = require('body-parser'); 
+app.use(bodyParser.json({ limit: '15mb' }));
+
 // Definición del puerto en el que la aplicación escuchará las solicitudes
 const PORT = 5000;
 
@@ -14,7 +17,6 @@ app.use(cors());
 // Importación y uso de las rutas definidas en el archivo
 const Router = require("./routes/routes")
 app.use(Router);
-
 
 // Inicio del servidor y escucha de solicitudes en el puerto especificado
 app.listen(PORT, () => {
