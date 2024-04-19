@@ -5,6 +5,7 @@ import Registro from './componentes/registro';
 import Administrador from './componentes/admin';
 import CreatePosts from './componentes/createpost';
 import PostList from './componentes/posts';
+import Reportes from './componentes/reportes';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/admin" element={<Administrador />} />
           <Route path="/create" element={<CreatePosts />} />
           <Route path="/list" element={<PostList />} />
+          <Route path="/reporte" element={<Reportes />} />
         </Routes>
     </Router>
   );

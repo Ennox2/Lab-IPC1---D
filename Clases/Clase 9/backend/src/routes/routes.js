@@ -6,7 +6,7 @@ const router = express.Router(); // Crea el Express router
 const { Registro, GetUsers, Login } = require('../controladores/ingreso');
 const { DeleteUser } = require('../controladores/delete');
 const { UpdateUser } = require('../controladores/update');
-const { GetPosts, Publicar } = require('../controladores/posts');
+const { GetPosts, Publicar, reporteCategoria } = require('../controladores/posts');
 
 
 //Metodos Post
@@ -25,6 +25,7 @@ router.put('/update', UpdateUser )
 
 router.post('/publicar', Publicar)
 router.get('/posts', GetPosts)
+router.get('/reportecategoria', reporteCategoria)
 
 
 

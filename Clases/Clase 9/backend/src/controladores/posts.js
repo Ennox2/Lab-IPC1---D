@@ -58,7 +58,32 @@ function GetPosts(req, res) {
 
 }
 
+
+function reporteCategoria(req, res) {
+    try{        
+        const categories = ['Anuncio Importante', 'Divertido', 'Académico', 'Variedad'];
+        const countByCategory = {};
+
+        // Inicializar el conteo de todas las categorías a 0
+        categories.forEach(category => {
+            countByCategory[category] = 0;
+        });
+
+        // Contar la cantidad de posts por categoría
+        for (const post of list_posts) {
+            countByCategory[post.category]++;
+        }
+
+        res.json({countByCategory})
+    }catch (error) {        
+        console.log(error)
+        res.json({mensaje : "Ocurrio un error"})
+    }
+
+}
+
 module.exports = {
     Publicar,
-    GetPosts
+    GetPosts,
+    reporteCategoria
 }

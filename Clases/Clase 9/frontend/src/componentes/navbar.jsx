@@ -4,9 +4,7 @@ import Cookies from 'js-cookie';
 
 function Sidebar({ activeWindow }) {
 
-    const handleSignOut = () => {
-        // Lógica para cerrar sesión
-        
+    const handleSignOut = () => {        
         alert('Cerrando sesión...');
         Cookies.remove('usuario')
 
@@ -58,8 +56,10 @@ function Sidebar({ activeWindow }) {
               </Link>
             </li>
             <li>
-              <Link to="/products" className="nav-link py-3 border-bottom rounded-0" title="Products" data-bs-toggle="tooltip" data-bs-placement="right">
-                <svg className="bi pe-none" width="24" height="24" role="img" aria-label="Products"><use xlinkHref="#grid"/></svg>
+              <Link to="/reporte" className={`nav-link py-3 border-bottom rounded-0 ${activeWindow === 'reportes' && 'active'}`} title="Reportes" data-bs-toggle="tooltip" data-bs-placement="right">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-bar-graph-fill" viewBox="0 0 16 16">
+                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2m-2 11.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5m-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5z"/>
+              </svg>
               </Link>
             </li>
             <li>
