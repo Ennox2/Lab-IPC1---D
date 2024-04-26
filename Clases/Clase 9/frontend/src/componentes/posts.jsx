@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './navbar';
+import '../css/comentarios.css'
+import Cookies from 'js-cookie';
 
 
 function PostList() {
@@ -7,6 +9,7 @@ function PostList() {
   const [posts, setPosts] = useState([]);
   // Estado para controlar la visibilidad de los comentarios de cada post
   const [showComments, setShowComments] = useState([]);
+  const [comentario, setComentario] = useState("");
 
   // Simulación de datos de ejemplo
   const exampleData = [
@@ -20,8 +23,8 @@ function PostList() {
       dateTime: '2024-04-10T12:00:00',
       likes: 10,
       comments: [
-        { id: 1, name: 'Ana García', faculty: 'Facultad de Ingeniería', comment: '¡Genial!' },
-        { id: 2, name: 'Pedro Martínez', faculty: 'Facultad de Ingeniería', comment: 'Interesante.' }
+        { name: 'Ana García', faculty: 'Facultad de Ingeniería', comment: '¡Genial!' },
+        { name: 'Pedro Martínez', faculty: 'Facultad de Ingeniería', comment: 'Interesante.' }
       ]
     },
     {
@@ -33,8 +36,8 @@ function PostList() {
       dateTime: '2024-04-09T15:30:00',
       likes: 15,
       comments: [
-        { id: 3, name: 'Sofía Rodríguez', faculty: 'Facultad de Economía', comment: '¡Jajaja!' },
-        { id: 4, name: 'Eduardo Gómez', faculty: 'Facultad de Economía', comment: 'XD.' }
+        { name: 'Sofía Rodríguez', faculty: 'Facultad de Economía', comment: '¡Jajaja!' },
+        { name: 'Eduardo Gómez', faculty: 'Facultad de Economía', comment: 'XD.' }
       ]
     }
   ];
@@ -57,11 +60,54 @@ function PostList() {
       };
 
     fetchData();
-    
-    //setPosts(exampleData);
-    // Inicializar el estado para controlar la visibilidad de los comentarios de cada post
-    //setShowComments(Array(exampleData.length).fill(false));
+
+    // setPosts(exampleData);
+    // // Inicializar el estado para controlar la visibilidad de los comentarios de cada post
+    // setShowComments(Array(exampleData.length).fill(false));
   }, []);
+
+
+
+  const handleSubmit = async (event, postId) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/comentar', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ carnet:  Cookies.get('usuario'), 
+                                publicacion: postId,
+                                comentario: comentario}),
+      })
+
+      const data = await response.json();
+
+      const fetchData = async () => {
+          try {
+              const response = await fetch('http://localhost:5000/posts', {
+                  method: 'GET',
+              });
+              if (response.ok) {
+                  const data = await response.json();
+                  setPosts(data.posts);
+              }
+              } catch (error) {
+                  console.error('Error al realizar la solicitud:', error);
+              }
+          };
+    
+      fetchData();
+      
+      alert(data.mensaje)
+
+    } catch (error) {
+
+      console.log("Error en la solicitud", error);
+
+    }
+    
+  };
 
   // Función para cambiar la visibilidad de los comentarios de un post
   const toggleComments = (index) => {
@@ -70,13 +116,56 @@ function PostList() {
     setShowComments(newShowComments);
   };
 
+
+  const toggleLike = async (id) => {
+    try {
+      const response = await fetch('http://localhost:5000/like', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ carnet:  Cookies.get('usuario'), 
+                                publicacion: id}),
+      })
+
+      const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/posts', {
+                method: 'GET',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setPosts(data.posts);
+            }
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
+            }
+        };
+  
+      fetchData();
+
+      const data = await response.json();
+      alert(data.mensaje)
+
+    } catch (error) {
+
+      console.log("Error en la solicitud", error);
+
+    }
+  };
+
+  const handleChange = (event) => {
+    const newValue = event.target.value;
+    setComentario(newValue);
+  };
+
   return (
     <div className="App">
       <Sidebar activeWindow="posts" />
 
       <div className="content" style={{ overflowY: 'auto', maxHeight: '100vh' }}>
         <div className="container mt-5">
-          <h2 style={{ color: 'white'}}>Lista de Posts</h2>
+          <h2 style={{ color: 'white' }}>Lista de Posts</h2>
           {posts.map((post, index) => (
             <div key={post.id} className="card mb-3">
               <div className="card-body">
@@ -88,19 +177,28 @@ function PostList() {
                 <p className="card-text"><small className="text-muted">Publicado el {new Date(post.dateTime).toLocaleString()}</small></p>
                 <div className="d-flex justify-content-between">
                   <p className="card-text"><small className="text-muted">{post.likes} Likes</small></p>
+                  <button onClick={() => toggleLike(post.id)} className="btn btn-primary">Me gusta</button>
                   <button onClick={() => toggleComments(index)} className="btn btn-secondary">Mostrar Comentarios</button>
                 </div>
                 {showComments[index] && (
                   <div className="comments mt-3">
                     <h6>Comentarios:</h6>
                     {post.comments.map((comment) => (
-                      <div key={comment.id} className="card mb-2">
+                      <div className="card mb-2">
                         <div className="card-body">
                           <p><strong>{comment.name}</strong> ({comment.faculty})</p>
                           <p>{comment.comment}</p>
                         </div>
                       </div>
                     ))}
+
+                    <div className="custom-textarea-container">
+                      <textarea value={comentario}  onChange={handleChange} className="custom-textarea"></textarea>
+                      <button onClick={(event) => handleSubmit(event, post.id)} className="custom-button">Enviar</button>
+                    </div>
+
+
+
                   </div>
                 )}
               </div>
